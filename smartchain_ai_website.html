@@ -1,0 +1,777 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#04070d;--bg2:#080d16;--surface:#0c1420;--surface2:#111b2a;
+  --border:#1a2a3f;--border2:#1e3350;
+  --accent:#00d4ff;--accent2:#0098b5;--green:#00e5a0;--amber:#f5a623;--red:#ff4757;--purple:#a78bfa;
+  --text:#e8f4ff;--text2:#7ba3c8;--text3:#3d6080;
+  --mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;--display:'Syne',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;min-height:100vh}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(4,7,13,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{font-family:var(--display);font-size:1.25rem;color:var(--accent);letter-spacing:-0.5px;cursor:pointer}
+.logo span{color:var(--text2)}
+.nav-links{display:flex;gap:0.25rem}
+.nav-link{background:none;border:none;color:var(--text2);font-family:var(--sans);font-size:0.8rem;padding:0.4rem 0.75rem;border-radius:6px;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;text-transform:uppercase}
+.nav-link:hover,.nav-link.active{color:var(--accent);background:rgba(0,212,255,0.08)}
+.nav-cta{background:var(--accent);color:#000;border:none;font-family:var(--sans);font-weight:600;font-size:0.8rem;padding:0.45rem 1rem;border-radius:6px;cursor:pointer;transition:all 0.2s;letter-spacing:0.5px}
+.nav-cta:hover{background:#fff;transform:translateY(-1px)}
+
+/* SECTIONS */
+section{display:none;padding-top:60px}
+section.active{display:block}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;padding:80px 2rem 4rem}
+.hero-grid{position:absolute;inset:0;opacity:0.04;background-image:linear-gradient(var(--border2) 1px,transparent 1px),linear-gradient(90deg,var(--border2) 1px,transparent 1px);background-size:40px 40px}
+.hero-glow{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(0,212,255,0.12) 0%,transparent 70%);pointer-events:none}
+.hero-content{max-width:900px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:0.35rem 1rem;font-size:0.75rem;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:2rem}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+h1{font-family:var(--display);font-size:clamp(3rem,7vw,5.5rem);line-height:0.95;letter-spacing:-2px;margin-bottom:1.5rem;font-weight:800}
+h1 .line1{display:block;color:var(--text)}
+h1 .line2{display:block;color:var(--accent);text-shadow:0 0 60px rgba(0,212,255,0.3)}
+.hero-sub{font-size:1.1rem;color:var(--text2);max-width:600px;margin:0 auto 2.5rem;line-height:1.7}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:4rem}
+.btn-primary{background:var(--accent);color:#000;border:none;font-family:var(--sans);font-weight:700;font-size:0.95rem;padding:0.85rem 2rem;border-radius:8px;cursor:pointer;transition:all 0.2s;display:inline-flex;align-items:center;gap:0.5rem}
+.btn-primary:hover{background:#fff;transform:translateY(-2px)}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border2);font-family:var(--sans);font-weight:500;font-size:0.95rem;padding:0.85rem 2rem;border-radius:8px;cursor:pointer;transition:all 0.2s}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;max-width:700px;margin:0 auto}
+.stat-item{background:var(--surface);padding:1.25rem 1rem;text-align:center}
+.stat-val{font-family:var(--display);font-size:1.8rem;font-weight:800;color:var(--accent);display:block}
+.stat-lbl{font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-top:0.2rem}
+
+/* FEATURES PAGE */
+#features{background:var(--bg);min-height:100vh;padding:80px 2rem 4rem}
+.page-header{text-align:center;margin-bottom:3rem}
+.page-badge{display:inline-block;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:0.3rem 0.85rem;font-size:0.72rem;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+.page-header h2{font-family:var(--display);font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-1.5px;color:var(--text);margin-bottom:0.75rem}
+.page-header p{color:var(--text2);max-width:560px;margin:0 auto;line-height:1.7}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden;max-width:1000px;margin:0 auto}
+.feature-card{background:var(--surface);padding:1.75rem;transition:background 0.2s;cursor:pointer}
+.feature-card:hover{background:var(--surface2)}
+.feat-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:1.3rem}
+.feat-title{font-weight:600;font-size:0.95rem;color:var(--text);margin-bottom:0.4rem}
+.feat-desc{font-size:0.82rem;color:var(--text2);line-height:1.6}
+.feat-tag{display:inline-block;margin-top:0.75rem;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.8px;padding:0.2rem 0.6rem;border-radius:4px;font-family:var(--mono)}
+
+/* DASHBOARD DEMO */
+#dashboard{background:var(--bg);min-height:100vh;padding:80px 2rem 4rem}
+.dash-wrap{max-width:1000px;margin:0 auto}
+.dash-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
+.dash-title{font-family:var(--display);font-size:1.4rem;font-weight:800;color:var(--text);letter-spacing:-0.5px}
+.dash-meta{font-family:var(--mono);font-size:0.72rem;color:var(--accent);background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);padding:0.35rem 0.85rem;border-radius:6px;display:flex;align-items:center;gap:0.5rem}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem}
+.kpi-label{font-size:0.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.4rem}
+.kpi-val{font-family:var(--display);font-size:1.6rem;font-weight:800;color:var(--text);line-height:1}
+.kpi-change{font-size:0.72rem;margin-top:0.3rem;font-family:var(--mono)}
+.kpi-change.up{color:var(--green)}
+.kpi-change.down{color:var(--red)}
+.dash-grid{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:1.5rem}
+.dash-panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+.panel-title{font-size:0.78rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+.panel-title::before{content:'';width:3px;height:12px;background:var(--accent);border-radius:2px}
+/* Chart bars */
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:120px;margin-bottom:0.5rem}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;border-radius:4px 4px 0 0;transition:height 0.5s}
+.bar-lbl{font-size:0.62rem;color:var(--text3);font-family:var(--mono)}
+/* Shipment list */
+.shipment-item{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid var(--border)}
+.shipment-item:last-child{border-bottom:none}
+.s-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.s-id{font-family:var(--mono);font-size:0.72rem;color:var(--accent);flex:0 0 80px}
+.s-info{flex:1;font-size:0.78rem;color:var(--text)}
+.s-status{font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:4px;font-family:var(--mono);font-weight:500}
+.s-transit{background:rgba(245,166,35,0.15);color:var(--amber)}
+.s-delivered{background:rgba(0,229,160,0.15);color:var(--green)}
+.s-delayed{background:rgba(255,71,87,0.15);color:var(--red)}
+/* Map placeholder */
+.map-panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+.map-viz{height:200px;background:var(--bg2);border-radius:8px;position:relative;overflow:hidden;border:1px solid var(--border)}
+.map-grid-lines{position:absolute;inset:0;opacity:0.15;background-image:linear-gradient(var(--border2) 1px,transparent 1px),linear-gradient(90deg,var(--border2) 1px,transparent 1px);background-size:30px 30px}
+.route-svg{position:absolute;inset:0;width:100%;height:100%}
+.pulse-dot{animation:map-pulse 2s infinite}
+@keyframes map-pulse{0%,100%{r:4;opacity:1}50%{r:8;opacity:0.4}}
+.alert-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+.alert-item{display:flex;align-items:flex-start;gap:0.75rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+.alert-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
+.alert-body{flex:1}
+.alert-type{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.2rem;font-family:var(--mono)}
+.alert-msg{font-size:0.8rem;color:var(--text);line-height:1.4}
+.alert-time{font-size:0.65rem;color:var(--text3);margin-top:0.25rem;font-family:var(--mono)}
+
+/* ARCHITECTURE */
+#architecture{background:var(--bg);min-height:100vh;padding:80px 2rem 4rem}
+.arch-wrap{max-width:1000px;margin:0 auto}
+.arch-layers{display:flex;flex-direction:column;gap:12px}
+.arch-layer{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem}
+.layer-header{display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem}
+.layer-badge{font-size:0.65rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;padding:0.2rem 0.6rem;border-radius:4px}
+.layer-title{font-weight:600;color:var(--text);font-size:0.95rem}
+.layer-items{display:flex;flex-wrap:wrap;gap:8px}
+.layer-chip{font-size:0.75rem;font-family:var(--mono);background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:0.35rem 0.75rem;color:var(--text2);display:flex;align-items:center;gap:0.4rem}
+.layer-chip::before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor;opacity:0.7}
+.arrow-down{text-align:center;color:var(--text3);font-size:0.8rem;padding:0.25rem 0;font-family:var(--mono)}
+
+/* TECH STACK */
+#techstack{background:var(--bg);min-height:100vh;padding:80px 2rem 4rem}
+.stack-wrap{max-width:1000px;margin:0 auto}
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.stack-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
+.stack-icon{font-size:2rem;margin-bottom:1rem}
+.stack-name{font-weight:700;font-size:1rem;color:var(--text);margin-bottom:0.25rem}
+.stack-cat{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--text3);margin-bottom:0.75rem;font-family:var(--mono)}
+.stack-items{list-style:none;display:flex;flex-direction:column;gap:0.4rem}
+.stack-items li{font-size:0.8rem;color:var(--text2);display:flex;align-items:center;gap:0.4rem}
+.stack-items li::before{content:'›';color:var(--accent)}
+
+/* PITCH */
+#pitch{background:var(--bg);min-height:100vh;padding:80px 2rem 4rem}
+.pitch-wrap{max-width:900px;margin:0 auto}
+.pitch-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:2rem}
+.pitch-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.75rem}
+.pitch-card.full{grid-column:1/-1}
+.pitch-card h3{font-family:var(--display);font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:0.75rem;letter-spacing:-0.5px}
+.pitch-card p,.pitch-card li{font-size:0.85rem;color:var(--text2);line-height:1.7}
+.pitch-card ul{list-style:none;display:flex;flex-direction:column;gap:0.4rem}
+.pitch-card li::before{content:'→ ';color:var(--accent)}
+.elevator{background:linear-gradient(135deg,var(--surface) 0%,var(--bg2) 100%);border:1px solid rgba(0,212,255,0.2);border-radius:12px;padding:2rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.elevator::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(0,212,255,0.08),transparent 70%)}
+.elevator-label{font-size:0.65rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:0.75rem}
+.elevator-text{font-family:var(--display);font-size:1.3rem;font-weight:700;color:var(--text);line-height:1.5;letter-spacing:-0.5px}
+
+/* ROADMAP */
+#roadmap{background:var(--bg);min-height:100vh;padding:80px 2rem 4rem}
+.roadmap-wrap{max-width:900px;margin:0 auto}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:grid;grid-template-columns:120px 1fr;gap:0}
+.tl-left{display:flex;flex-direction:column;align-items:center;padding:0 1.5rem 0 0}
+.tl-time{font-family:var(--mono);font-size:0.7rem;color:var(--accent);text-align:right;padding-top:0.25rem;margin-bottom:0.75rem;white-space:nowrap}
+.tl-line{flex:1;width:1px;background:var(--border2);position:relative;margin-left:auto}
+.tl-dot{position:absolute;top:0;left:50%;transform:translate(-50%,-1px);width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(0,212,255,0.5)}
+.tl-content{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:12px}
+.tl-phase{font-size:0.65rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;color:var(--text3);margin-bottom:0.3rem}
+.tl-title{font-weight:700;color:var(--text);font-size:0.95rem;margin-bottom:0.5rem}
+.tl-tasks{list-style:none;display:flex;flex-direction:column;gap:0.3rem}
+.tl-tasks li{font-size:0.78rem;color:var(--text2);display:flex;align-items:center;gap:0.4rem}
+.tl-tasks li::before{content:'✓';color:var(--green);font-size:0.65rem}
+
+/* SLIDES */
+#slides{background:var(--bg);min-height:100vh;padding:80px 2rem 4rem}
+.slides-wrap{max-width:900px;margin:0 auto}
+.slide-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.slide-counter{font-family:var(--mono);font-size:0.8rem;color:var(--text2)}
+.slide-btns{display:flex;gap:8px}
+.slide-btn{background:var(--surface);border:1px solid var(--border);color:var(--text2);width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.slide-btn:hover{border-color:var(--accent);color:var(--accent)}
+.slide-dots{display:flex;gap:6px}
+.slide-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);cursor:pointer;transition:all 0.2s}
+.slide-dot.active{background:var(--accent);width:18px;border-radius:3px}
+.slide-frame{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:3rem;min-height:360px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.slide-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--purple))}
+.slide-num{position:absolute;top:1.5rem;right:1.5rem;font-family:var(--display);font-size:4rem;font-weight:800;color:var(--surface2);line-height:1;pointer-events:none;user-select:none}
+.slide-tag{font-size:0.65rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:0.75rem}
+.slide-title{font-family:var(--display);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1.1;margin-bottom:1rem}
+.slide-body{font-size:0.88rem;color:var(--text2);line-height:1.7;max-width:560px}
+.slide-body ul{list-style:none;margin-top:0.75rem;display:flex;flex-direction:column;gap:0.5rem}
+.slide-body li{display:flex;align-items:flex-start;gap:0.5rem}
+.slide-body li::before{content:'▸';color:var(--accent);flex-shrink:0;margin-top:0.1rem}
+.slide-visual{display:flex;gap:12px;margin-top:1.25rem;flex-wrap:wrap}
+.slide-chip{background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:0.5rem 0.85rem;font-size:0.75rem;font-family:var(--mono);color:var(--text2)}
+
+/* REPO */
+#repo{background:var(--bg);min-height:100vh;padding:80px 2rem 4rem}
+.repo-wrap{max-width:900px;margin:0 auto}
+.repo-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+.repo-header{display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem}
+.repo-name{font-family:var(--mono);font-size:0.95rem;color:var(--accent);font-weight:500}
+.repo-meta{display:flex;gap:0.75rem;margin-left:auto}
+.repo-badge{font-size:0.65rem;font-family:var(--mono);background:var(--bg);border:1px solid var(--border);padding:0.2rem 0.5rem;border-radius:4px;color:var(--text3)}
+.tree{font-family:var(--mono);font-size:0.78rem;color:var(--text2);line-height:2;background:var(--bg);border-radius:8px;padding:1.25rem}
+.tree .dir{color:var(--accent)}
+.tree .file{color:var(--text3)}
+.tree .comment{color:var(--text3);font-style:italic}
+.env-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:1rem}
+.env-card{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem}
+.env-title{font-size:0.72rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.5px;color:var(--text3);margin-bottom:0.5rem}
+.env-items{list-style:none;display:flex;flex-direction:column;gap:0.25rem}
+.env-items li{font-size:0.75rem;font-family:var(--mono);color:var(--text2);padding:0.2rem 0;border-bottom:1px solid var(--border)}
+.env-items li:last-child{border-bottom:none}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Smart<span>Chain</span> AI</div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="show('hero')">Home</button>
+    <button class="nav-link" onclick="show('features')">Features</button>
+    <button class="nav-link" onclick="show('dashboard')">Demo</button>
+    <button class="nav-link" onclick="show('architecture')">Architecture</button>
+    <button class="nav-link" onclick="show('techstack')">Tech Stack</button>
+    <button class="nav-link" onclick="show('pitch')">Pitch</button>
+    <button class="nav-link" onclick="show('roadmap')">Roadmap</button>
+    <button class="nav-link" onclick="show('slides')">Slides</button>
+    <button class="nav-link" onclick="show('repo')">GitHub</button>
+  </div>
+  <button class="nav-cta" onclick="show('dashboard')">Live Demo →</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="active">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span>Hackathon 2025 · Logistics Track</div>
+    <h1>
+      <span class="line1">The AI-Powered</span>
+      <span class="line2">Supply Chain OS</span>
+    </h1>
+    <p class="hero-sub">SmartChain AI unifies real-time tracking, predictive intelligence, and autonomous optimization into one platform — reducing delays by 40% and cutting logistics costs by 35%.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="show('dashboard')">⚡ View Live Demo</button>
+      <button class="btn-secondary" onclick="show('pitch')">📋 Investor Pitch</button>
+      <button class="btn-secondary" onclick="show('slides')">🎤 Presentation</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-val">15+</span><span class="stat-lbl">AI Features</span></div>
+      <div class="stat-item"><span class="stat-val">40%</span><span class="stat-lbl">Delay Reduction</span></div>
+      <div class="stat-item"><span class="stat-val">$2.1T</span><span class="stat-lbl">Market Size</span></div>
+      <div class="stat-item"><span class="stat-val">Real</span><span class="stat-lbl">Time Tracking</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="page-header">
+    <div class="page-badge">Platform Capabilities</div>
+    <h2>15 Core AI Features</h2>
+    <p>Every module powered by machine learning — from last-mile delivery to carbon tracking</p>
+  </div>
+  <div class="features-grid" style="max-width:1000px;margin:0 auto">
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(0,212,255,0.1)">📍</div><div class="feat-title">Real-Time Shipment Tracking</div><div class="feat-desc">GPS + IoT integration with live map visualization. Sub-second location updates across all active shipments with geofencing alerts.</div><span class="feat-tag" style="background:rgba(0,212,255,0.1);color:var(--accent)">GPS · IoT · WebSocket</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(0,229,160,0.1)">🛣️</div><div class="feat-title">AI Route Optimization</div><div class="feat-desc">Dynamic re-routing using traffic, weather, and historical data. Reduces fuel costs by up to 28% with ML-powered pathfinding algorithms.</div><span class="feat-tag" style="background:rgba(0,229,160,0.1);color:var(--green)">ML · Maps API · Weather</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(167,139,250,0.1)">🏭</div><div class="feat-title">Smart Warehouse Management</div><div class="feat-desc">AI-driven shelf allocation, pick-path optimization, and robotic coordination. 60% faster fulfillment with computer vision quality control.</div><span class="feat-tag" style="background:rgba(167,139,250,0.1);color:var(--purple)">CV · Robotics · RFID</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(245,166,35,0.1)">📦</div><div class="feat-title">Inventory Monitoring & Forecasting</div><div class="feat-desc">Real-time stock levels with LSTM-based demand forecasting. Prevents stockouts and overstocking with automated replenishment triggers.</div><span class="feat-tag" style="background:rgba(245,166,35,0.1);color:var(--amber)">LSTM · RFID · Analytics</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(0,212,255,0.1)">🔮</div><div class="feat-title">Demand Prediction AI</div><div class="feat-desc">Multivariate time-series forecasting using seasonal trends, market signals, and social data. 94% accuracy at 30-day horizon.</div><span class="feat-tag" style="background:rgba(0,212,255,0.1);color:var(--accent)">Prophet · XGBoost · NLP</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(0,229,160,0.1)">🤝</div><div class="feat-title">Supplier & Vendor Management</div><div class="feat-desc">AI risk scoring, performance tracking, and blockchain-verified contracts. Automated RFQ generation with compliance monitoring.</div><span class="feat-tag" style="background:rgba(0,229,160,0.1);color:var(--green)">Blockchain · Risk AI</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(255,71,87,0.1)">🚚</div><div class="feat-title">Fleet Monitoring Dashboard</div><div class="feat-desc">Live vehicle telemetry, driver behavior scoring, predictive maintenance alerts, and fuel efficiency analytics across your entire fleet.</div><span class="feat-tag" style="background:rgba(255,71,87,0.1);color:var(--red)">Telematics · ML · OBD-II</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(167,139,250,0.1)">⏱️</div><div class="feat-title">Delivery ETA Prediction</div><div class="feat-desc">Deep learning model combining traffic, weather, driver patterns, and historical routes. Real-time ETA updates sent to customers automatically.</div><span class="feat-tag" style="background:rgba(167,139,250,0.1);color:var(--purple)">Deep Learning · Real-time</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(245,166,35,0.1)">🔔</div><div class="feat-title">Smart Alerts & Notifications</div><div class="feat-desc">Priority-ranked intelligent alerts with root cause analysis. Eliminates notification fatigue — only critical signals reach your team.</div><span class="feat-tag" style="background:rgba(245,166,35,0.1);color:var(--amber)">ML Ranking · WebPush</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(0,212,255,0.1)">📋</div><div class="feat-title">Order Management System</div><div class="feat-desc">End-to-end order lifecycle with AI exception handling. Auto-resolves 70% of order issues without human intervention via decision trees.</div><span class="feat-tag" style="background:rgba(0,212,255,0.1);color:var(--accent)">Automation · ERP</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(0,229,160,0.1)">📊</div><div class="feat-title">Supply Chain Analytics</div><div class="feat-desc">Executive dashboards with drill-down capability. Bottleneck detection, cost attribution, and scenario modeling with what-if analysis.</div><span class="feat-tag" style="background:rgba(0,229,160,0.1);color:var(--green)">BI · Dashboards</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(167,139,250,0.1)">🌱</div><div class="feat-title">Carbon Emission Tracking</div><div class="feat-desc">Scope 1/2/3 emissions measurement per shipment. Green routing alternatives with ESG reporting for compliance and sustainability goals.</div><span class="feat-tag" style="background:rgba(167,139,250,0.1);color:var(--purple)">ESG · Green AI</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(245,166,35,0.1)">🎙️</div><div class="feat-title">Voice Logistics Assistant</div><div class="feat-desc">Natural language interface to query shipments, update statuses, and get recommendations. Works hands-free in warehouse environments.</div><span class="feat-tag" style="background:rgba(245,166,35,0.1);color:var(--amber)">NLP · Whisper · LLM</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(0,212,255,0.1)">📄</div><div class="feat-title">Automated Report Generation</div><div class="feat-desc">GenAI-powered narrative reports combining data analysis with executive summaries. Scheduled delivery in PDF, Excel, or Slack.</div><span class="feat-tag" style="background:rgba(0,212,255,0.1);color:var(--accent)">GenAI · Scheduling</span></div>
+    <div class="feature-card"><div class="feat-icon" style="background:rgba(255,71,87,0.1)">⚠️</div><div class="feat-title">Risk & Delay Prediction</div><div class="feat-desc">ML model trained on geopolitical, weather, and supplier data to predict disruptions 72 hours ahead. Automatic mitigation playbooks.</div><span class="feat-tag" style="background:rgba(255,71,87,0.1);color:var(--red)">Risk ML · NLP · Alerts</span></div>
+  </div>
+  <div style="margin-top:3rem;max-width:1000px;margin:3rem auto 0">
+    <div class="page-badge" style="margin-bottom:1rem;display:block;text-align:center">Hackathon-Winning Innovations</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
+      <div style="background:var(--surface);border:1px solid rgba(0,212,255,0.2);border-radius:10px;padding:1.25rem">
+        <div style="font-size:0.72rem;font-family:var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.5rem">⛓ Blockchain</div>
+        <div style="font-weight:600;color:var(--text);margin-bottom:0.3rem;font-size:0.9rem">Immutable Shipment Verification</div>
+        <div style="font-size:0.78rem;color:var(--text2);line-height:1.5">Every handoff, temperature reading, and chain-of-custody event cryptographically signed on Hyperledger Fabric.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:1.25rem">
+        <div style="font-size:0.72rem;font-family:var(--mono);color:var(--purple);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.5rem">🌐 Digital Twin</div>
+        <div style="font-weight:600;color:var(--text);margin-bottom:0.3rem;font-size:0.9rem">Live Supply Chain Mirror</div>
+        <div style="font-size:0.78rem;color:var(--text2);line-height:1.5">Real-time 3D simulation of your entire supply chain. Run disruption scenarios before they happen.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid rgba(0,229,160,0.2);border-radius:10px;padding:1.25rem">
+        <div style="font-size:0.72rem;font-family:var(--mono);color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.5rem">🚁 Autonomous</div>
+        <div style="font-weight:600;color:var(--text);margin-bottom:0.3rem;font-size:0.9rem">Drone Last-Mile Concept</div>
+        <div style="font-size:0.78rem;color:var(--text2);line-height:1.5">Integration framework for autonomous drone delivery corridors with smart city airspace management API.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD DEMO -->
+<section id="dashboard">
+  <div class="dash-wrap">
+    <div class="dash-topbar">
+      <div class="dash-title">Operations Center</div>
+      <div class="dash-meta"><span class="live-dot"></span>Live · Last updated just now</div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-label">Active Shipments</div><div class="kpi-val">2,847</div><div class="kpi-change up">↑ 12% vs yesterday</div></div>
+      <div class="kpi"><div class="kpi-label">On-Time Rate</div><div class="kpi-val">94.2%</div><div class="kpi-change up">↑ 3.1% this week</div></div>
+      <div class="kpi"><div class="kpi-label">Active Alerts</div><div class="kpi-val">18</div><div class="kpi-change down">↓ 5 from 1hr ago</div></div>
+      <div class="kpi"><div class="kpi-label">CO₂ Saved (kg)</div><div class="kpi-val">4,230</div><div class="kpi-change up">↑ 8% this month</div></div>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-panel">
+        <div class="panel-title">Weekly Delivery Volume</div>
+        <div class="chart-bars" id="chart-bars"></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.62rem;color:var(--text3);font-family:var(--mono)">
+          <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+        </div>
+      </div>
+      <div class="dash-panel">
+        <div class="panel-title">Live Shipments</div>
+        <div id="shipment-list"></div>
+      </div>
+    </div>
+    <div class="map-panel" style="margin-bottom:12px">
+      <div class="panel-title">Fleet Tracking — Global View</div>
+      <div class="map-viz">
+        <div class="map-grid-lines"></div>
+        <svg class="route-svg" viewBox="0 0 600 200">
+          <defs><marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+          <!-- Routes -->
+          <path d="M80,160 Q200,60 380,80" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.5" stroke-dasharray="6 3" marker-end="url(#arr2)"/>
+          <path d="M120,50 Q280,120 500,90" fill="none" stroke="#00e5a0" stroke-width="1.5" opacity="0.5" stroke-dasharray="6 3" marker-end="url(#arr2)"/>
+          <path d="M300,150 Q420,40 560,60" fill="none" stroke="#f5a623" stroke-width="1.5" opacity="0.5" stroke-dasharray="6 3" marker-end="url(#arr2)"/>
+          <path d="M50,90 Q150,170 300,150" fill="none" stroke="#a78bfa" stroke-width="1.5" opacity="0.5" stroke-dasharray="6 3" marker-end="url(#arr2)"/>
+          <!-- Nodes -->
+          <circle cx="80" cy="160" r="4" fill="#00d4ff" class="pulse-dot"/><circle cx="80" cy="160" r="8" fill="none" stroke="#00d4ff" opacity="0.3"/>
+          <circle cx="380" cy="80" r="4" fill="#00d4ff"/>
+          <circle cx="120" cy="50" r="4" fill="#00e5a0" class="pulse-dot"/><circle cx="120" cy="50" r="8" fill="none" stroke="#00e5a0" opacity="0.3"/>
+          <circle cx="500" cy="90" r="4" fill="#00e5a0"/>
+          <circle cx="300" cy="150" r="4" fill="#f5a623" class="pulse-dot"/><circle cx="300" cy="150" r="8" fill="none" stroke="#f5a623" opacity="0.3"/>
+          <circle cx="560" cy="60" r="4" fill="#f5a623"/>
+          <circle cx="50" cy="90" r="4" fill="#a78bfa" class="pulse-dot"/>
+          <!-- Labels -->
+          <text x="75" y="178" fill="#7ba3c8" font-size="8" font-family="monospace">Mumbai</text>
+          <text x="370" y="70" fill="#7ba3c8" font-size="8" font-family="monospace">Dubai</text>
+          <text x="110" y="40" fill="#7ba3c8" font-size="8" font-family="monospace">London</text>
+          <text x="488" y="80" fill="#7ba3c8" font-size="8" font-family="monospace">Singapore</text>
+          <text x="285" y="168" fill="#7ba3c8" font-size="8" font-family="monospace">Shanghai</text>
+          <text x="545" y="50" fill="#7ba3c8" font-size="8" font-family="monospace">Tokyo</text>
+          <text x="30" y="80" fill="#7ba3c8" font-size="8" font-family="monospace">NYC</text>
+          <!-- Moving dots -->
+          <circle r="3" fill="#00d4ff" opacity="0.9"><animateMotion dur="4s" repeatCount="indefinite" path="M80,160 Q200,60 380,80"/></circle>
+          <circle r="3" fill="#00e5a0" opacity="0.9"><animateMotion dur="5s" repeatCount="indefinite" path="M120,50 Q280,120 500,90"/></circle>
+          <circle r="3" fill="#f5a623" opacity="0.9"><animateMotion dur="3.5s" repeatCount="indefinite" path="M300,150 Q420,40 560,60"/></circle>
+          <circle r="3" fill="#a78bfa" opacity="0.9"><animateMotion dur="4.5s" repeatCount="indefinite" path="M50,90 Q150,170 300,150"/></circle>
+        </svg>
+      </div>
+    </div>
+    <div class="alert-row">
+      <div class="alert-item"><div class="alert-icon" style="background:rgba(255,71,87,0.12)">⚠️</div><div class="alert-body"><div class="alert-type" style="color:var(--red)">Risk Alert · High</div><div class="alert-msg">Severe storm system detected on Route IN-DXB-7. AI recommends rerouting 23 shipments via Colombo hub.</div><div class="alert-time">2 min ago</div></div></div>
+      <div class="alert-item"><div class="alert-icon" style="background:rgba(0,229,160,0.12)">✅</div><div class="alert-body"><div class="alert-type" style="color:var(--green)">Optimization · Auto</div><div class="alert-msg">Route optimization saved ₹1.2L on 47 deliveries today. Avg distance reduced by 18km per route.</div><div class="alert-time">15 min ago</div></div></div>
+      <div class="alert-item"><div class="alert-icon" style="background:rgba(245,166,35,0.12)">📦</div><div class="alert-body"><div class="alert-type" style="color:var(--amber)">Inventory · Medium</div><div class="alert-msg">Electronics SKU-4521 at 12% stock. Demand forecast predicts 340% surge in 5 days (Diwali season).</div><div class="alert-time">1 hr ago</div></div></div>
+      <div class="alert-item"><div class="alert-icon" style="background:rgba(167,139,250,0.12)">🚚</div><div class="alert-body"><div class="alert-type" style="color:var(--purple)">Fleet · Maintenance</div><div class="alert-msg">Vehicle KA-05-TN-4821 shows brake wear pattern. Predictive model suggests service in 340km (≈ 2 days).</div><div class="alert-time">3 hr ago</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="arch-wrap">
+    <div class="page-header">
+      <div class="page-badge">System Design</div>
+      <h2>Technical Architecture</h2>
+      <p>A cloud-native, microservices-based platform built for 99.99% uptime and infinite scale</p>
+    </div>
+    <div class="arch-layers">
+      <div class="arch-layer">
+        <div class="layer-header"><span class="layer-badge" style="background:rgba(0,212,255,0.1);color:var(--accent)">Layer 1 · Client</span><span class="layer-title">Presentation & Interface Layer</span></div>
+        <div class="layer-items">
+          <div class="layer-chip">Next.js 14 (App Router)</div><div class="layer-chip">React 18 + TypeScript</div><div class="layer-chip">Tailwind CSS</div><div class="layer-chip">Framer Motion</div><div class="layer-chip">Mapbox GL JS</div><div class="layer-chip">Recharts / D3.js</div><div class="layer-chip">PWA + Service Worker</div><div class="layer-chip">React Query</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓ REST / GraphQL / WebSocket</div>
+      <div class="arch-layer">
+        <div class="layer-header"><span class="layer-badge" style="background:rgba(0,229,160,0.1);color:var(--green)">Layer 2 · Gateway</span><span class="layer-title">API Gateway & Auth Layer</span></div>
+        <div class="layer-items">
+          <div class="layer-chip">AWS API Gateway</div><div class="layer-chip">Kong (Rate Limiting)</div><div class="layer-chip">NextAuth.js + JWT</div><div class="layer-chip">OAuth 2.0 / SAML</div><div class="layer-chip">Nginx (Load Balancer)</div><div class="layer-chip">Redis (Session Cache)</div><div class="layer-chip">SSL/TLS Termination</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓ Internal Service Mesh (gRPC)</div>
+      <div class="arch-layer">
+        <div class="layer-header"><span class="layer-badge" style="background:rgba(167,139,250,0.1);color:var(--purple)">Layer 3 · Microservices</span><span class="layer-title">Core Business Logic Services</span></div>
+        <div class="layer-items">
+          <div class="layer-chip">Tracking Service (Node.js)</div><div class="layer-chip">Routing Engine (Python)</div><div class="layer-chip">Inventory Service (Go)</div><div class="layer-chip">Fleet Management (Node.js)</div><div class="layer-chip">Order Service (Java/Spring)</div><div class="layer-chip">Notification Service (Node.js)</div><div class="layer-chip">Analytics Service (Python)</div><div class="layer-chip">Blockchain Service (Hyperledger)</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓ Message Broker (Apache Kafka)</div>
+      <div class="arch-layer">
+        <div class="layer-header"><span class="layer-badge" style="background:rgba(245,166,35,0.1);color:var(--amber)">Layer 4 · AI/ML</span><span class="layer-title">Intelligence & Prediction Engine</span></div>
+        <div class="layer-items">
+          <div class="layer-chip">Demand Forecast (LSTM/Prophet)</div><div class="layer-chip">Route Optimizer (OR-Tools)</div><div class="layer-chip">Risk Detection (XGBoost)</div><div class="layer-chip">ETA Prediction (Gradient Boost)</div><div class="layer-chip">NLP Assistant (GPT-4o)</div><div class="layer-chip">CV Quality Check (YOLO v8)</div><div class="layer-chip">Anomaly Detection (Isolation Forest)</div><div class="layer-chip">MLflow + Seldon Core</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓ Database & Storage Layer</div>
+      <div class="arch-layer">
+        <div class="layer-header"><span class="layer-badge" style="background:rgba(255,71,87,0.1);color:var(--red)">Layer 5 · Data</span><span class="layer-title">Persistence, Cache & Analytics Store</span></div>
+        <div class="layer-items">
+          <div class="layer-chip">PostgreSQL (Transactional)</div><div class="layer-chip">MongoDB (Documents)</div><div class="layer-chip">TimescaleDB (IoT/Telemetry)</div><div class="layer-chip">Redis Cluster (Cache)</div><div class="layer-chip">ClickHouse (Analytics OLAP)</div><div class="layer-chip">AWS S3 (Object Storage)</div><div class="layer-chip">Elasticsearch (Search)</div><div class="layer-chip">Apache Pinot (Real-time OLAP)</div>
+        </div>
+      </div>
+      <div class="arrow-down">↓ Cloud Infrastructure</div>
+      <div class="arch-layer">
+        <div class="layer-header"><span class="layer-badge" style="background:rgba(0,212,255,0.1);color:var(--accent)">Layer 6 · Cloud</span><span class="layer-title">Infrastructure, DevOps & Security</span></div>
+        <div class="layer-items">
+          <div class="layer-chip">AWS EKS (Kubernetes)</div><div class="layer-chip">Terraform (IaC)</div><div class="layer-chip">ArgoCD (GitOps)</div><div class="layer-chip">Prometheus + Grafana</div><div class="layer-chip">AWS CloudWatch</div><div class="layer-chip">HashiCorp Vault (Secrets)</div><div class="layer-chip">WAF + DDoS Shield</div><div class="layer-chip">Multi-AZ Deployment</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:2rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem">
+      <div class="panel-title">Database Schema (Key Entities)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:1rem">
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;font-family:var(--mono);font-size:0.72rem">
+          <div style="color:var(--accent);margin-bottom:0.5rem;font-weight:500">Shipment</div>
+          <div style="color:var(--text3)">id: UUID (PK)</div><div style="color:var(--text3)">order_id: UUID (FK)</div><div style="color:var(--text3)">origin: JSONB</div><div style="color:var(--text3)">destination: JSONB</div><div style="color:var(--text3)">status: ENUM</div><div style="color:var(--text3)">eta: TIMESTAMP</div><div style="color:var(--text3)">route: JSONB</div><div style="color:var(--text3)">carrier_id: UUID (FK)</div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;font-family:var(--mono);font-size:0.72rem">
+          <div style="color:var(--green);margin-bottom:0.5rem;font-weight:500">Vehicle</div>
+          <div style="color:var(--text3)">id: UUID (PK)</div><div style="color:var(--text3)">reg_no: VARCHAR</div><div style="color:var(--text3)">driver_id: UUID</div><div style="color:var(--text3)">lat: DECIMAL</div><div style="color:var(--text3)">lon: DECIMAL</div><div style="color:var(--text3)">fuel_pct: DECIMAL</div><div style="color:var(--text3)">health_score: INT</div><div style="color:var(--text3)">last_seen: TIMESTAMP</div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;font-family:var(--mono);font-size:0.72rem">
+          <div style="color:var(--amber);margin-bottom:0.5rem;font-weight:500">Inventory</div>
+          <div style="color:var(--text3)">sku_id: UUID (PK)</div><div style="color:var(--text3)">warehouse_id: UUID</div><div style="color:var(--text3)">qty_on_hand: INT</div><div style="color:var(--text3)">qty_reserved: INT</div><div style="color:var(--text3)">reorder_point: INT</div><div style="color:var(--text3)">lead_time_days: INT</div><div style="color:var(--text3)">forecast_30d: INT</div><div style="color:var(--text3)">last_counted: DATE</div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;font-family:var(--mono);font-size:0.72rem">
+          <div style="color:var(--purple);margin-bottom:0.5rem;font-weight:500">Supplier</div>
+          <div style="color:var(--text3)">id: UUID (PK)</div><div style="color:var(--text3)">name: VARCHAR</div><div style="color:var(--text3)">risk_score: DECIMAL</div><div style="color:var(--text3)">on_time_rate: DECIMAL</div><div style="color:var(--text3)">quality_score: INT</div><div style="color:var(--text3)">country: VARCHAR</div><div style="color:var(--text3)">contracts: JSONB</div><div style="color:var(--text3)">blockchain_id: VARCHAR</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section id="techstack">
+  <div class="stack-wrap">
+    <div class="page-header">
+      <div class="page-badge">Engineering</div>
+      <h2>Full Tech Stack</h2>
+      <p>Production-ready choices optimized for hackathon speed and enterprise scale</p>
+    </div>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="stack-icon">⚛️</div><div class="stack-name">Frontend</div><div class="stack-cat">UI Layer</div><ul class="stack-items"><li>Next.js 14 (App Router)</li><li>TypeScript 5.x</li><li>Tailwind CSS + shadcn/ui</li><li>Framer Motion</li><li>React Query v5</li><li>Mapbox GL JS</li></ul></div>
+      <div class="stack-card"><div class="stack-icon">⚙️</div><div class="stack-name">Backend</div><div class="stack-cat">API Services</div><ul class="stack-items"><li>Node.js + Express (REST)</li><li>FastAPI (Python AI Services)</li><li>Go (High-throughput services)</li><li>GraphQL (Apollo Server)</li><li>WebSocket (Socket.io)</li><li>gRPC (Internal)</li></ul></div>
+      <div class="stack-card"><div class="stack-icon">🧠</div><div class="stack-name">AI / ML</div><div class="stack-cat">Intelligence</div><ul class="stack-items"><li>Python 3.11 + scikit-learn</li><li>TensorFlow / PyTorch</li><li>HuggingFace Transformers</li><li>Prophet (Forecasting)</li><li>Google OR-Tools (Routing)</li><li>OpenAI GPT-4o (Assistant)</li></ul></div>
+      <div class="stack-card"><div class="stack-icon">🗄️</div><div class="stack-name">Database</div><div class="stack-cat">Data Layer</div><ul class="stack-items"><li>PostgreSQL 16 (Primary)</li><li>MongoDB Atlas (Docs)</li><li>TimescaleDB (Time-series)</li><li>Redis 7 (Cache/Queue)</li><li>ClickHouse (Analytics)</li><li>Elasticsearch 8 (Search)</li></ul></div>
+      <div class="stack-card"><div class="stack-icon">☁️</div><div class="stack-name">Cloud / Infra</div><div class="stack-cat">Deployment</div><ul class="stack-items"><li>AWS EKS (Production)</li><li>Vercel (Next.js Frontend)</li><li>Docker + Kubernetes</li><li>Terraform (IaC)</li><li>AWS S3 + CloudFront</li><li>GitHub Actions CI/CD</li></ul></div>
+      <div class="stack-card"><div class="stack-icon">📡</div><div class="stack-name">IoT / Data</div><div class="stack-cat">Streams</div><ul class="stack-items"><li>Apache Kafka (Events)</li><li>AWS IoT Core (GPS/Sensors)</li><li>MQTT Protocol</li><li>Hyperledger Fabric</li><li>Apache Airflow (Pipelines)</li><li>dbt (Data Transform)</li></ul></div>
+      <div class="stack-card"><div class="stack-icon">🔒</div><div class="stack-name">Security</div><div class="stack-cat">Protection</div><ul class="stack-items"><li>OAuth 2.0 + JWT</li><li>HashiCorp Vault</li><li>AWS WAF + Shield</li><li>OWASP compliance</li><li>AES-256 encryption</li><li>SOC 2 Type II ready</li></ul></div>
+      <div class="stack-card"><div class="stack-icon">📊</div><div class="stack-name">Observability</div><div class="stack-cat">Monitoring</div><ul class="stack-items"><li>Prometheus + Grafana</li><li>OpenTelemetry</li><li>Sentry (Error tracking)</li><li>PagerDuty (Alerts)</li><li>DataDog APM</li><li>Loki (Log aggregation)</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- PITCH -->
+<section id="pitch">
+  <div class="pitch-wrap">
+    <div class="page-header">
+      <div class="page-badge">Investor Pitch</div>
+      <h2>SmartChain AI — The Pitch</h2>
+      <p>Everything you need for judging, investor meetings, and demo day</p>
+    </div>
+    <div class="elevator">
+      <div class="elevator-label">⚡ 30-Second Elevator Pitch</div>
+      <div class="elevator-text">"Every year, businesses lose $1.5 trillion to supply chain inefficiencies — missed deliveries, stockouts, wasted fuel, and blind spots. SmartChain AI is the world's first logistics operating system that combines real-time IoT tracking, predictive AI, and blockchain verification into a single platform. We don't just show you problems — we solve them autonomously. Early pilots show 40% fewer delays, 35% cost reduction, and 28% lower carbon emissions. We're not building another dashboard. We're building the intelligence layer that runs the global supply chain."</div>
+    </div>
+    <div class="pitch-grid">
+      <div class="pitch-card">
+        <h3>🚨 Problem Statement</h3>
+        <ul>
+          <li>$1.5T lost annually to supply chain inefficiencies</li>
+          <li>74% of companies have no real-time supply chain visibility</li>
+          <li>Average delay costs businesses $82,000/hour</li>
+          <li>40% of logistics decisions still made on spreadsheets</li>
+          <li>Supply chains account for 8% of global CO₂ emissions</li>
+        </ul>
+      </div>
+      <div class="pitch-card">
+        <h3>✅ Our Solution</h3>
+        <ul>
+          <li>Unified AI platform for end-to-end supply chain ops</li>
+          <li>Real-time visibility across all nodes and carriers</li>
+          <li>Predictive AI prevents disruptions before they happen</li>
+          <li>Auto-resolves 70% of exceptions without human input</li>
+          <li>Blockchain for immutable, auditable supply chain trust</li>
+        </ul>
+      </div>
+      <div class="pitch-card">
+        <h3>💎 Unique Selling Points</h3>
+        <ul>
+          <li>Only platform combining IoT + AI + Blockchain natively</li>
+          <li>Generative AI assistant that understands logistics context</li>
+          <li>Digital twin simulation for risk-free scenario planning</li>
+          <li>Carbon-aware routing — green and profitable simultaneously</li>
+          <li>No-code integration with 200+ ERP and WMS systems</li>
+        </ul>
+      </div>
+      <div class="pitch-card">
+        <h3>💰 Business Model</h3>
+        <ul>
+          <li>SaaS tiers: Starter $499/mo · Pro $1,999/mo · Enterprise custom</li>
+          <li>Usage-based pricing for API calls (IoT data, AI predictions)</li>
+          <li>Marketplace: certified integrations and logistics apps</li>
+          <li>Data intelligence reports sold to logistics research firms</li>
+          <li>Implementation and consulting services (20% revenue)</li>
+        </ul>
+      </div>
+      <div class="pitch-card full">
+        <h3>📈 Market Opportunity</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:0.5rem">
+          <div style="text-align:center;background:var(--bg);border-radius:8px;padding:1rem">
+            <div style="font-family:var(--display);font-size:2rem;font-weight:800;color:var(--accent)">$2.1T</div>
+            <div style="font-size:0.75rem;color:var(--text2);margin-top:0.25rem">Global Logistics Market 2025</div>
+          </div>
+          <div style="text-align:center;background:var(--bg);border-radius:8px;padding:1rem">
+            <div style="font-family:var(--display);font-size:2rem;font-weight:800;color:var(--green)">$45B</div>
+            <div style="font-size:0.75rem;color:var(--text2);margin-top:0.25rem">Supply Chain Software TAM</div>
+          </div>
+          <div style="text-align:center;background:var(--bg);border-radius:8px;padding:1rem">
+            <div style="font-family:var(--display);font-size:2rem;font-weight:800;color:var(--amber)">31%</div>
+            <div style="font-size:0.75rem;color:var(--text2);margin-top:0.25rem">CAGR for AI Logistics Tools</div>
+          </div>
+        </div>
+        <p style="margin-top:1rem">India alone represents a $215B logistics market growing at 10.5% annually. With 14 million SMEs struggling with logistics visibility and the government's PM GatiShakti initiative driving infrastructure investment, SmartChain AI is perfectly positioned to capture this wave.</p>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.75rem;margin-bottom:1.5rem">
+      <h3 style="font-family:var(--display);font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:1rem;letter-spacing:-0.5px">🎤 Demo Script for Judges</h3>
+      <div style="display:flex;flex-direction:column;gap:0.75rem">
+        <div style="display:flex;gap:1rem;align-items:flex-start"><div style="background:var(--accent);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;margin-top:0.1rem">1</div><div style="font-size:0.82rem;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Opening hook (0:00–0:30):</strong> "Right now, a shipment is delayed somewhere in India. The business doesn't know yet. Their customer doesn't know. But SmartChain AI already does — and it's already rerouting."</div></div>
+        <div style="display:flex;gap:1rem;align-items:flex-start"><div style="background:var(--green);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;margin-top:0.1rem">2</div><div style="font-size:0.82rem;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Live Demo — Dashboard (0:30–2:00):</strong> Show the Operations Center with live KPIs. Click a red alert to show how the AI already computed 3 alternative routes and ranked them by cost, time, and carbon.</div></div>
+        <div style="display:flex;gap:1rem;align-items:flex-start"><div style="background:var(--purple);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;margin-top:0.1rem">3</div><div style="font-size:0.82rem;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">AI Voice Assistant (2:00–3:00):</strong> Say "What's the risk level for our Bangalore to Chennai shipments this week?" — watch the AI respond with real data and a recommendation.</div></div>
+        <div style="display:flex;gap:1rem;align-items:flex-start"><div style="background:var(--amber);color:#000;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;margin-top:0.1rem">4</div><div style="font-size:0.82sm;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Blockchain Verification (3:00–3:45):</strong> Show the immutable audit trail for a shipment — every scan, signature, and temperature reading cryptographically verified on-chain.</div></div>
+        <div style="display:flex;gap:1rem;align-items:flex-start"><div style="background:var(--red);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;margin-top:0.1rem">5</div><div style="font-size:0.82rem;color:var(--text2);line-height:1.6"><strong style="color:var(--text)">Close with impact (3:45–4:00):</strong> "We built this in 48 hours. Imagine what we'll build in 48 months. SmartChain AI — the supply chain that thinks."</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap">
+  <div class="roadmap-wrap">
+    <div class="page-header">
+      <div class="page-badge">48-Hour Hackathon Plan</div>
+      <h2>Implementation Roadmap</h2>
+      <p>From zero to demo-ready in 48 hours — a battle-tested execution plan</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-time">Hour 0–4</div><div class="tl-line"><div class="tl-dot"></div></div></div>
+        <div class="tl-content"><div class="tl-phase">Phase 1 · Setup</div><div class="tl-title">Foundation & Architecture</div><ul class="tl-tasks"><li>Initialize Next.js 14 monorepo with TypeScript</li><li>Set up Tailwind CSS, shadcn/ui, and design tokens</li><li>Configure PostgreSQL + Redis + MongoDB locally</li><li>Define API contracts and OpenAPI spec</li><li>Set up GitHub Actions CI/CD pipeline</li></ul></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-time">Hour 4–12</div><div class="tl-line"><div class="tl-dot" style="background:var(--green)"></div></div></div>
+        <div class="tl-content"><div class="tl-phase">Phase 2 · Core Backend</div><div class="tl-title">APIs & Data Pipeline</div><ul class="tl-tasks"><li>Build Shipment Tracking REST API (Node.js + Express)</li><li>Implement WebSocket server for real-time GPS updates</li><li>Create Inventory & Order management endpoints</li><li>Mock IoT GPS data generator for demo</li><li>Integrate Google Maps / Mapbox for route visualization</li><li>Set up Alert engine with priority scoring</li></ul></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-time">Hour 12–24</div><div class="tl-line"><div class="tl-dot" style="background:var(--amber)"></div></div></div>
+        <div class="tl-content"><div class="tl-phase">Phase 3 · AI Integration</div><div class="tl-title">Intelligence Layer</div><ul class="tl-tasks"><li>Demand forecasting model (Prophet + sample data)</li><li>Route optimization with Google OR-Tools</li><li>ETA prediction (gradient boosting on historical data)</li><li>Risk detection rule engine + basic ML model</li><li>Integrate OpenAI GPT-4o for voice assistant</li><li>Carbon emission calculator per route</li></ul></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-time">Hour 24–36</div><div class="tl-line"><div class="tl-dot" style="background:var(--purple)"></div></div></div>
+        <div class="tl-content"><div class="tl-phase">Phase 4 · Frontend</div><div class="tl-title">Dashboard & UI Build</div><ul class="tl-tasks"><li>Operations Center dashboard with live KPIs</li><li>Interactive fleet tracking map (animated routes)</li><li>Shipment list with real-time status updates</li><li>Alert center with priority ranking</li><li>Inventory monitoring charts (Recharts/D3)</li><li>Responsive design + dark mode polish</li></ul></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-time">Hour 36–44</div><div class="tl-line"><div class="tl-dot" style="background:var(--red)"></div></div></div>
+        <div class="tl-content"><div class="tl-phase">Phase 5 · Differentiation</div><div class="tl-title">Winning Features</div><ul class="tl-tasks"><li>Blockchain shipment verification (Hyperledger mock)</li><li>Digital twin scenario simulator</li><li>Voice assistant UI with real-time transcript</li><li>Predictive maintenance vehicle alerts</li><li>Carbon dashboard with green alternatives</li><li>Automated PDF report generation</li></ul></div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left"><div class="tl-time">Hour 44–48</div><div class="tl-line"><div class="tl-dot" style="background:var(--accent)"></div></div></div>
+        <div class="tl-content"><div class="tl-phase">Phase 6 · Ship It</div><div class="tl-title">Deploy, Test & Present</div><ul class="tl-tasks"><li>Deploy frontend to Vercel (one command)</li><li>Deploy backend to Railway / Render</li><li>Load demo data and validate all flows</li><li>Rehearse 4-minute demo script twice</li><li>Prepare GitHub repo with clean README</li><li>Final polish — animations, loading states, errors</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDES -->
+<section id="slides">
+  <div class="slides-wrap">
+    <div class="page-header">
+      <div class="page-badge">Presentation</div>
+      <h2>10-Slide Deck</h2>
+      <p>Click through the complete hackathon presentation</p>
+    </div>
+    <div class="slide-nav">
+      <button class="slide-btn" onclick="prevSlide()">←</button>
+      <div class="slide-dots" id="slide-dots"></div>
+      <div class="slide-counter" id="slide-counter">1 / 10</div>
+      <button class="slide-btn" onclick="nextSlide()">→</button>
+    </div>
+    <div class="slide-frame" id="slide-frame"></div>
+  </div>
+</section>
+
+<!-- GITHUB REPO -->
+<section id="repo">
+  <div class="repo-wrap">
+    <div class="page-header">
+      <div class="page-badge">Open Source</div>
+      <h2>GitHub Repository</h2>
+      <p>Clean, documented, ready to clone and run in 5 minutes</p>
+    </div>
+    <div class="repo-card">
+      <div class="repo-header">
+        <div class="repo-name">🔗 github.com/yourteam/smartchain-ai</div>
+        <div class="repo-meta">
+          <span class="repo-badge">⭐ Next.js 14</span>
+          <span class="repo-badge">MIT License</span>
+          <span class="repo-badge">TypeScript</span>
+        </div>
+      </div>
+      <div class="tree">
+<span class="dir">smartchain-ai/</span>
+├── <span class="dir">apps/</span>
+│   ├── <span class="dir">web/</span>               <span class="comment"># Next.js 14 frontend</span>
+│   │   ├── <span class="dir">app/</span>           <span class="comment"># App Router pages</span>
+│   │   │   ├── <span class="file">page.tsx</span>       <span class="comment"># Landing page</span>
+│   │   │   ├── <span class="dir">dashboard/</span>     <span class="comment"># Operations center</span>
+│   │   │   ├── <span class="dir">shipments/</span>     <span class="comment"># Tracking module</span>
+│   │   │   ├── <span class="dir">inventory/</span>     <span class="comment"># Stock management</span>
+│   │   │   ├── <span class="dir">fleet/</span>         <span class="comment"># Vehicle tracking</span>
+│   │   │   ├── <span class="dir">analytics/</span>     <span class="comment"># Reports & charts</span>
+│   │   │   └── <span class="dir">api/</span>           <span class="comment"># Next.js API routes</span>
+│   │   ├── <span class="dir">components/</span>    <span class="comment"># Reusable UI components</span>
+│   │   └── <span class="dir">lib/</span>           <span class="comment"># Utilities & hooks</span>
+│   └── <span class="dir">ai-service/</span>        <span class="comment"># Python FastAPI AI layer</span>
+│       ├── <span class="dir">models/</span>        <span class="comment"># ML models (demand, risk, ETA)</span>
+│       ├── <span class="dir">routers/</span>       <span class="comment"># API endpoints</span>
+│       └── <span class="file">main.py</span>        <span class="comment"># FastAPI entry point</span>
+├── <span class="dir">packages/</span>
+│   ├── <span class="dir">database/</span>          <span class="comment"># Prisma schema + migrations</span>
+│   ├── <span class="dir">types/</span>             <span class="comment"># Shared TypeScript types</span>
+│   └── <span class="dir">ui/</span>                <span class="comment"># Component library</span>
+├── <span class="dir">infrastructure/</span>
+│   ├── <span class="dir">terraform/</span>         <span class="comment"># AWS IaC configs</span>
+│   ├── <span class="dir">k8s/</span>               <span class="comment"># Kubernetes manifests</span>
+│   └── <span class="dir">docker/</span>            <span class="comment"># Docker compose for local dev</span>
+├── <span class="dir">scripts/</span>               <span class="comment"># Seed data, setup helpers</span>
+├── <span class="file">docker-compose.yml</span>     <span class="comment"># One command local setup</span>
+├── <span class="file">turbo.json</span>             <span class="comment"># Turborepo config</span>
+└── <span class="file">README.md</span>             <span class="comment"># Start here!</span>
+      </div>
+    </div>
+    <div class="repo-card">
+      <div style="font-weight:600;color:var(--text);margin-bottom:1rem;font-size:0.9rem">Quick Start</div>
+      <div class="tree">
+<span class="comment"># Clone and setup</span>
+git clone https://github.com/yourteam/smartchain-ai
+cd smartchain-ai
+cp .env.example .env.local
+
+<span class="comment"># Install dependencies (monorepo)</span>
+pnpm install
+
+<span class="comment"># Start all services with Docker</span>
+docker-compose up -d
+
+<span class="comment"># Seed demo data</span>
+pnpm db:seed
+
+<span class="comment"># Run frontend dev server</span>
+pnpm dev
+<span class="comment"># → http://localhost:3000</span>
+
+<span class="comment"># Run AI service (separate terminal)</span>
+cd apps/ai-service
+pip install -r requirements.txt
+uvicorn main:app --reload
+<span class="comment"># → http://localhost:8000</span>
+      </div>
+    </div>
+    <div class="env-grid">
+      <div class="env-card"><div class="env-title">Environment Variables</div><ul class="env-items"><li>DATABASE_URL=postgresql://...</li><li>REDIS_URL=redis://localhost:6379</li><li>OPENAI_API_KEY=sk-...</li><li>MAPBOX_TOKEN=pk.eyJ1...</li><li>NEXTAUTH_SECRET=...</li><li>AWS_ACCESS_KEY_ID=...</li><li>KAFKA_BROKERS=localhost:9092</li></ul></div>
+      <div class="env-card"><div class="env-title">Deployment (Vercel + Railway)</div><ul class="env-items"><li>vercel deploy → Frontend live</li><li>railway up → Backend live</li><li>railway add postgresql</li><li>railway add redis</li><li>Push to main → auto deploy</li><li>Custom domain: smartchain.ai</li><li>SSL: auto-provisioned</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<script>
+// Navigation
+function show(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map = {hero:0,features:1,dashboard:2,architecture:3,techstack:4,pitch:5,roadmap:6,slides:7,repo:8};
+  if(map[id] !== undefined) document.querySelectorAll('.nav-link')[map[id]].classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Chart bars
+const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const vals = [840,920,1100,980,1240,760,620];
+const maxV = Math.max(...vals);
+const colors = ['#00d4ff','#00d4ff','#00e5a0','#00d4ff','#00e5a0','#7ba3c8','#7ba3c8'];
+const cb = document.getElementById('chart-bars');
+if(cb) {
+  vals.forEach((v,i) => {
+    const w = document.createElement('div');
+    w.className = 'bar-wrap';
+    const pct = Math.round(v/maxV*100);
+    w.innerHTML = `<div style="font-size:0.62rem;color:var(--text3);font-family:var(--mono);margin-bottom:2px">${v}</div><div class="bar" style="height:${pct}%;background:${colors[i]};opacity:0.8"></div>`;
+    cb.appendChild(w);
+  });
+}
+
+// Shipments
+const shipments = [
+  {id:'SC-8821',info:'Mumbai → Delhi · Electronics',status:'transit',dot:'#f5a623'},
+  {id:'SC-8819',info:'Chennai → Pune · Pharma',status:'delivered',dot:'#00e5a0'},
+  {id:'SC-8817',info:'Kolkata → Hyderabad · Auto Parts',status:'delayed',dot:'#ff4757'},
+  {id:'SC-8815',info:'Bangalore → Surat · Textiles',status:'transit',dot:'#00d4ff'},
+  {id:'SC-8813',info:'Ahmedabad → Chennai · FMCG',status:'delivered',dot:'#00e5a0'},
+];
+const labels = {transit:'In Transit',delivered:'Delivered',delayed:'Delayed'};
+const sl = document.getElementById('shipment-list');
+if(sl) {
+  shipments.forEach(s => {
+    sl.innerHTML += `<div class="shipment-item"><span class="s-dot" style="background:${s.dot}"></span><span class="s-id">${s.id}</span><span class="s-info">${s.info}</span><span class="s-status s-${s.status}">${labels[s.status]}</span></div>`;
+  });
+}
+
+// Slides
+const slides = [
+  {tag:'Slide 01 · Title',title:'SmartChain AI',body:'The Next-Generation AI-Powered Logistics Operating System. Real-time intelligence. Autonomous optimization. Zero blind spots.',chips:['Next.js 14','GPT-4o','Blockchain','IoT']},
+  {tag:'Slide 02 · Problem',title:'Supply Chains Are Broken',body:'<ul><li>$1.5 trillion lost annually to logistics inefficiencies</li><li>74% of companies fly blind — no real-time visibility</li><li>Average supply chain disruption costs $82,000/hour</li><li>40% of logistics decisions still made on spreadsheets</li><li>Climate crisis demands 50% logistics emissions cut by 2030</li></ul>'},
+  {tag:'Slide 03 · Solution',title:'One Platform. Full Intelligence.',body:'SmartChain AI is the only platform that combines real-time IoT tracking, predictive AI, and blockchain verification into a single unified operating system for modern supply chains.',chips:['Real-time Tracking','AI Optimization','Blockchain Trust','GenAI Assistant']},
+  {tag:'Slide 04 · Features',title:'15 AI-Powered Modules',body:'<ul><li>Real-time shipment tracking with animated route visualization</li><li>AI route optimization saving 28% on fuel costs</li><li>Demand forecasting with 94% accuracy at 30-day horizon</li><li>Predictive maintenance preventing fleet breakdowns</li><li>Carbon tracking with green logistics recommendations</li></ul>'},
+  {tag:'Slide 05 · Technology',title:'Built on Proven Technology',body:'<ul><li>Frontend: Next.js 14 + TypeScript + Tailwind CSS</li><li>AI/ML: Python FastAPI + TensorFlow + OpenAI GPT-4o</li><li>Data: PostgreSQL + TimescaleDB + Redis + ClickHouse</li><li>Blockchain: Hyperledger Fabric for shipment verification</li><li>Cloud: AWS EKS with Terraform IaC, 99.99% uptime SLA</li></ul>'},
+  {tag:'Slide 06 · Innovation',title:'Hackathon-Winning Features',body:'<ul><li>Digital Twin: live 3D simulation of your entire supply chain</li><li>Blockchain: immutable, cryptographically signed audit trail</li><li>Drone Integration: autonomous last-mile delivery framework</li><li>Generative AI: natural language logistics decision support</li><li>Carbon-Aware Routing: profitable AND sustainable simultaneously</li></ul>'},
+  {tag:'Slide 07 · Market',title:'$45B Market Opportunity',body:'<ul><li>Global logistics market: $2.1 trillion and growing 10% YoY</li><li>Supply chain software TAM: $45 billion by 2028</li><li>AI logistics tools CAGR: 31% (fastest growing SaaS category)</li><li>India market: $215B logistics, PM GatiShakti tailwind</li><li>SME white space: 14 million businesses with zero visibility</li></ul>'},
+  {tag:'Slide 08 · Business Model',title:'SaaS + Platform Revenue',body:'<ul><li>Starter: $499/month — up to 500 shipments, 5 users</li><li>Pro: $1,999/month — unlimited shipments, AI features</li><li>Enterprise: Custom — white-label, dedicated infrastructure</li><li>API Marketplace: usage-based IoT data and AI prediction calls</li><li>Target ARR Year 1: $2.4M from 100 Pro customers</li></ul>'},
+  {tag:'Slide 09 · Traction',title:'Built in 48 Hours',body:'<ul><li>Fully functional Next.js application — not a mockup</li><li>Live AI route optimization and ETA prediction running</li><li>Real-time WebSocket fleet tracking with animated map</li><li>Blockchain shipment verification prototype live</li><li>AI voice assistant demo ready for live judging</li></ul>',chips:['Live Demo Ready','GitHub: Public','Deployed on Vercel']},
+  {tag:'Slide 10 · Ask',title:'Join the SmartChain Revolution',body:'We are looking for: co-founders with logistics domain expertise, seed funding of $500K for MVP-to-market, and pilot partnerships with 3–5 enterprise logistics companies. The supply chain that thinks is ready. Are you?',chips:['Team of 4','48hr Build','Open to Partnerships']},
+];
+
+let cur = 0;
+function renderSlide() {
+  const s = slides[cur];
+  const dotsEl = document.getElementById('slide-dots');
+  const counterEl = document.getElementById('slide-counter');
+  const frameEl = document.getElementById('slide-frame');
+  if(!dotsEl || !counterEl || !frameEl) return;
+  dotsEl.innerHTML = slides.map((_,i)=>`<div class="slide-dot${i===cur?' active':''}" onclick="goSlide(${i})"></div>`).join('');
+  counterEl.textContent = `${cur+1} / ${slides.length}`;
+  const chips = s.chips ? `<div class="slide-visual">${s.chips.map(c=>`<div class="slide-chip">${c}</div>`).join('')}</div>` : '';
+  frameEl.innerHTML = `<div class="slide-num">${String(cur+1).padStart(2,'0')}</div><div class="slide-tag">${s.tag}</div><div class="slide-title">${s.title}</div><div class="slide-body">${s.body}${chips}</div>`;
+}
+function nextSlide(){cur=(cur+1)%slides.length;renderSlide()}
+function prevSlide(){cur=(cur-1+slides.length)%slides.length;renderSlide()}
+function goSlide(i){cur=i;renderSlide()}
+renderSlide();
+</script>
+</body>
+</html>
